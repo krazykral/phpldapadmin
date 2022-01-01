@@ -10,6 +10,9 @@ location /phpldapadmin {
     alias /opt/phpldapadmin/htdocs;
     index index.php index.html index.htm;
 
+    allow 127.0.0.1;
+    deny all;
+
     location ~ ^/phpldapadmin/(.+\.php)$ {
         try_files $uri =404;
         root /opt/;
