@@ -1083,7 +1083,9 @@ function masort(&$data,$sortby,$rev=0) {
 
 		$code .= 'return $c;';
 
-		$CACHE[$sortby] = create_function('$a, $b',$code);
+		#$CACHE[$sortby] = create_function('$a, $b',$code); # original, deprecated not working
+		$CACHE[$sortby] = function("$a, $b")  { $code; };  # appears to work the same as below 
+		#$CACHE[$sortby] = function($a, $b) { $code; };  # appears to work the same ase above
 	}
 
 	uasort($data,$CACHE[$sortby]);
