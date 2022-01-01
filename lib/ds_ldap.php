@@ -1117,12 +1117,14 @@ class ldap extends DS {
 		if (is_array($dn)) {
 			$a = array();
 			foreach ($dn as $key => $rdn)
-				$a[$key] = preg_replace('/\\\([0-9A-Fa-f]{2})/e',"''.chr(hexdec('\\1')).''",$rdn);
+				#$a[$key] = preg_replace('/\\\([0-9A-Fa-f]{2})/e',"''.chr(hexdec('\\1')).''",$rdn); # original
+				$a[$key] = preg_replace_callback('/\\\([0-9A-Fa-f]{2})/',function($matches) { return chr(hexdec("$matches[0]")); },$rdn);
 
 			return $a;
 
 		} else
-			return preg_replace('/\\\([0-9A-Fa-f]{2})/e',"''.chr(hexdec('\\1')).''",$dn);
+			#return preg_replace('/\\\([0-9A-Fa-f]{2})/e',"''.chr(hexdec('\\1')).''",$dn); # oro
+			return preg_replace_callback('/\\\([0-9A-Fa-f]{2})/', function($matches) { return  chr(hexdec("$matches[0]")); },$dn);
 	}
 
 	public function getRootDSE($method=null) {
