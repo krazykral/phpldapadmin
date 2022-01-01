@@ -51,7 +51,9 @@ if (file_exists(LIBDIR.'functions.custom.php'))
 /**
  * Loads class definition
  */
-function __autoload($className) {
+#function __autoload($className) {
+#function spl_autoload_register($className) {
+function thenew_autoload($className) {
 	if (file_exists(HOOKSDIR."classes/$className.php"))
 		require_once(HOOKSDIR."classes/$className.php");
 	elseif (file_exists(LIBDIR."$className.php"))
@@ -65,6 +67,7 @@ function __autoload($className) {
 				__METHOD__,_('Called to load a class that cant be found'),$className),
 			'type'=>'error'));
 }
+spl_autoload_register('thenew_autoload');
 
 /**
  * Strips all slashes from the specified array in place (pass by ref).
@@ -2127,7 +2130,7 @@ function password_types() {
  *        crypt, ext_des, md5crypt, blowfish, md5, sha, smd5, ssha, sha512, or clear.
  * @return string The hashed password.
  */
-function password_hash($password_clear,$enc_type) {
+function ppassword_hash($password_clear,$enc_type) {
 	if (DEBUG_ENABLED && (($fargs=func_get_args())||$fargs='NOARGS'))
 		debug_log('Entered (%%)',1,0,__FILE__,__LINE__,__METHOD__,$fargs);
 
@@ -2318,7 +2321,7 @@ function password_check($cryptedpassword,$plainpassword,$attribute='userpassword
 
 		# SHA crypted passwords
 		case 'sha':
-			if (strcasecmp(password_hash($plainpassword,'sha'),'{SHA}'.$cryptedpassword) == 0)
+			if (strcasecmp(ppassword_hash($plainpassword,'sha'),'{SHA}'.$cryptedpassword) == 0)
 				return true;
 			else
 				return false;
@@ -2327,7 +2330,7 @@ function password_check($cryptedpassword,$plainpassword,$attribute='userpassword
 
 		# MD5 crypted passwords
 		case 'md5':
-			if( strcasecmp(password_hash($plainpassword,'md5'),'{MD5}'.$cryptedpassword) == 0)
+			if( strcasecmp(ppassword_hash($plainpassword,'md5'),'{MD5}'.$cryptedpassword) == 0)
 				return true;
 			else
 				return false;
@@ -2392,7 +2395,7 @@ function password_check($cryptedpassword,$plainpassword,$attribute='userpassword
 
 		# SHA512 crypted passwords
 		case 'sha512':
-			if (strcasecmp(password_hash($plainpassword,'sha512'),'{SHA512}'.$cryptedpassword) == 0)
+			if (strcasecmp(ppassword_hash($plainpassword,'sha512'),'{SHA512}'.$cryptedpassword) == 0)
 				return true;
 			else
 				return false;
