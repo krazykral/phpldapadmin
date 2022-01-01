@@ -1,0 +1,24 @@
+# Nginx template for phpldapadmin
+# This template is not part of phpldapadmin code hosted below:
+#    https://sourceforge.net/projects/phpldapadmin/files/phpldapadmin-php5/1.2.3/
+#
+# This template was not created by this repo owner/creator and was derived from
+#   publicly available sources. 
+#
+
+location /phpldapadmin {
+    alias /opt/phpldapadmin/htdocs;
+    index index.php index.html index.htm;
+
+    location ~ ^/phpldapadmin/(.+\.php)$ {
+        try_files $uri =404;
+        root /opt/;
+        if ($request_filename !~* htdocs) {
+            rewrite ^/phpldapadmin(/.*)?$ /phpldapadmin/htdocs$1;
+        }
+        include /etc/nginx/templates/fastcgi_php.tmpl;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include /etc/nginx/fastcgi_params;
+    }
+}
+
