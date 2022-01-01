@@ -23,5 +23,7 @@ location /phpldapadmin {
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include /etc/nginx/fastcgi_params;
     }
+    error_log /var/log/nginx/phpldapadmin.error.log;
+    access_log /var/log/nginx/phpldapadmin.access.log;
 }
 
